@@ -29,9 +29,9 @@ class Resource(object):
 
     def on_get(self, req, resp):
         doc = {
-            'images': [
+            'audio': [
                 {
-                    'href': '/audio/1eaf6ef1-7f2d-4ecc-a8d5-6e8adba7cc0e.png'
+                    'href': '/audio/1eaf6ef1-7f2d-4ecc-a8d5-6e8adba7cc0e.wav -- dummy'
                 }
             ]
         }
