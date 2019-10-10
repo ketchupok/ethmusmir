@@ -8,6 +8,7 @@ import msgpack
 import json
 
 import scipy.io.wavfile as wav
+from .fieldRecordingSegmentation.speech_music_parts import find_speech_music_parts
 
 mimetypes.init()
 mimetypes.add_type('audio/wav', '.wav')
@@ -82,6 +83,7 @@ class AudioAnalysis(object):
 
     def analyse(self):
         (rate, sig) = wav.read(self._storage_path + self._name)
+        recording_parts = find_speech_music_parts(self._storage_path + self._name)
 
             #   "track": {
             #     "duration": 255.34898,
@@ -114,5 +116,6 @@ class AudioAnalysis(object):
         track = {}
         track['duration'] = len(sig)/rate
         track['tempo'] = 'nan'
+        track['parts'] = recording_parts
         analysis = {'track' : track}
         return analysis
