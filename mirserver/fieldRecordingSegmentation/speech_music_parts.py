@@ -12,8 +12,7 @@ import math
 import numpy as np
 import configparser
 from termcolor import colored
-from bokeh.plotting import figure, output_file, show
-from bokeh.models.annotations import Label, BoxAnnotation
+
 
 config = {
     "sampling_rate": 22050,
