@@ -10,7 +10,7 @@ Based on Python 3.5
 ### Ubuntu
 ```
 cd ethmusmir
-conda env create -f environment.yml
+conda env create --name EthMusMIR -f environment.yml -v
 conda activate EthMusMIR
 ```
 ### OSX
