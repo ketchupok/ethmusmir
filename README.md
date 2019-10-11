@@ -6,14 +6,22 @@ Architecture is heavily inspired by (copied from) the Falcon API [First Steps Tu
 Based on Python 3.5
 
 ## Install with Conda
+
+### Ubuntu
 ```
+cd ethmusmir
 conda env create -f environment.yml
 conda activate EthMusMIR
+```
+### OSX
+```
+conda env create --name EthMusMIR -f environment-osx.yml -v
 ```
 
 ## Run Server with
 
  ```
+mkdir tmp
 LOOK_STORAGE_PATH=tmp/ gunicorn --reload 'mirserver.app:get_app()'
 ```
 
