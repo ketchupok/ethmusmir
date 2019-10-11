@@ -51,3 +51,54 @@ location: /audio/2add4100-6630-4521-a4cc-128da173c257.wav
     }
 }
 ```
+
+Added code from: M. Marolt, C. Bohak, A. Kavčič, and M. Pesek, "Automatic segmentation of ethnomusicological field recordings," Applied sciences, vol. 9, iss. 3, pp. 1-12, 2019.
+
+ ```
+HTTP/1.1 201 Created
+Connection: close
+Date: Thu, 10 Oct 2019 14:47:41 GMT
+Server: gunicorn/19.9.0
+content-length: 387
+content-type: application/json; charset=UTF-8
+location: /audio/b35fb930-90d1-42a6-a870-24d3e9713a09.wav
+
+{
+    "track": {
+        "duration": 11.0120625,
+        "parts": [
+            {
+                "content": "speech",
+                "duration": 1,
+                "start": 0
+            },
+            {
+                "content": "solo singing",
+                "duration": 2,
+                "start": 1
+            },
+            {
+                "content": "instrumental",
+                "duration": 1,
+                "start": 3
+            },
+            {
+                "content": "choir singing",
+                "duration": 3,
+                "start": 4
+            },
+            {
+                "content": "solo singing",
+                "duration": 1,
+                "start": 7
+            },
+            {
+                "content": "speech",
+                "duration": 2,
+                "start": 8
+            }
+        ],
+        "tempo": "nan"
+    }
+}
+```
