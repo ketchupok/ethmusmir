@@ -26,7 +26,7 @@ LOOK_STORAGE_PATH=tmp/ gunicorn --reload 'mirserver.app:get_app()'
 ```
 
 
-## Sent Wave File for analysis
+## Send a Mono-Wave File for analysis
 
  from somewhere else ..
 
