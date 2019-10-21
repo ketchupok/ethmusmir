@@ -6,13 +6,15 @@ import uuid
 import falcon
 import msgpack
 import json
-
+import logging
 import scipy.io.wavfile as wav
+
 from .fieldRecordingSegmentation.speech_music_parts import find_speech_music_parts
 
+# General Settings
+logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s')
 mimetypes.init()
 mimetypes.add_type('audio/wav', '.wav')
-
 ALLOWED_AUDIO_TYPES = (
     'audio/wav',
     #'audio/mp3',
@@ -23,6 +25,8 @@ def validate_audio_type(req, resp, resource, params):
         msg = 'Audio type not allowed. Must be WAV or MP3'
         raise falcon.HTTPBadRequest('Bad request', msg)
 
+
+# Server functionality
 class Resource(object):
 
     def __init__(self, audio_store):
@@ -43,6 +47,7 @@ class Resource(object):
 
     @falcon.before(validate_audio_type) # hook
     def on_post(self, req, resp):
+        logging.info('Received a POST request.')
         name = self._audio_store.save(req.stream, req.content_type)
         audio_analysis = AudioAnalysis(name, self._audio_store._storage_path)
         audio_result = audio_analysis.analyse()
@@ -51,6 +56,7 @@ class Resource(object):
         resp.location = '/audio/' + name
 
 
+#  storing the received audio file (TODO: make it temporarily)
 class AudioStore(object):
 
     _CHUNK_SIZE_BYTES = 4096
@@ -61,6 +67,7 @@ class AudioStore(object):
         self._fopen = fopen
 
     def save(self, audio_stream, audio_content_type):
+        logging.info('Storing attached file. (collecting chunks..)')
         ext = mimetypes.guess_extension(audio_content_type)
         name = '{uuid}{ext}'.format(uuid=self._uuidgen(), ext=ext)
         audio_path = os.path.join(self._storage_path, name)
@@ -72,7 +79,7 @@ class AudioStore(object):
                     break
 
                 audio_file.write(chunk)
-
+        logging.info('File received and temporarily stored.')
         return name
 
 class AudioAnalysis(object):
@@ -82,40 +89,46 @@ class AudioAnalysis(object):
         self._storage_path = path
 
     def analyse(self):
-        (rate, sig) = wav.read(self._storage_path + self._name)
-        recording_parts = find_speech_music_parts(self._storage_path + self._name)
+        logging.info('Starting MIR analysis.')
+        try:
+            (rate, sig) = wav.read(self._storage_path + self._name)
+            recording_parts = find_speech_music_parts(self._storage_path + self._name)
 
-            #   "track": {
-            #     "duration": 255.34898,
-            #     "sample_md5": "",
-            #     "offset_seconds": 0,
-            #     "window_seconds": 0,
-            #     "analysis_sample_rate": 22050,
-            #     "analysis_channels": 1,
-            #     "end_of_fade_in": 0,
-            #     "start_of_fade_out": 251.73333,
-            #     "loudness": -11.84,
-            #     "tempo": 98.002,
-            #     "tempo_confidence": 0.423,
-            #     "time_signature": 4,
-            #     "time_signature_confidence": 1,
-            #     "key": 5,
-            #     "key_confidence": 0.36,
-            #     "mode": 0,
-            #     "mode_confidence": 0.414,
-            #     "codestring": "eJxVnAmS5DgOBL-ST-B9_P9j4x7M6qoxW9tpsZQSCeI...",
-            #     "code_version": 3.15,
-            #     "echoprintstring": "eJzlvQmSHDmStHslxw4cB-v9j_A-tahhVKV0IH9...",
-            #     "echoprint_version": 4.12,
-            #     "synchstring": "eJx1mIlx7ToORFNRCCK455_YoE9Dtt-vmrKsK3EBsTY...",
-            #     "synch_version": 1,
-            #     "rhythmstring": "eJyNXAmOLT2r28pZQuZh_xv7g21Iqu_3pCd160xV...",
-            #     "rhythm_version": 1
-            #   }
-            # }
-        track = {}
-        track['duration'] = len(sig)/rate
-        track['tempo'] = 'nan'
-        track['parts'] = recording_parts
-        analysis = {'track' : track}
-        return analysis
+                #   "track": {
+                #     "duration": 255.34898,
+                #     "sample_md5": "",
+                #     "offset_seconds": 0,
+                #     "window_seconds": 0,
+                #     "analysis_sample_rate": 22050,
+                #     "analysis_channels": 1,
+                #     "end_of_fade_in": 0,
+                #     "start_of_fade_out": 251.73333,
+                #     "loudness": -11.84,
+                #     "tempo": 98.002,
+                #     "tempo_confidence": 0.423,
+                #     "time_signature": 4,
+                #     "time_signature_confidence": 1,
+                #     "key": 5,
+                #     "key_confidence": 0.36,
+                #     "mode": 0,
+                #     "mode_confidence": 0.414,
+                #     "codestring": "eJxVnAmS5DgOBL-ST-B9_P9j4x7M6qoxW9tpsZQSCeI...",
+                #     "code_version": 3.15,
+                #     "echoprintstring": "eJzlvQmSHDmStHslxw4cB-v9j_A-tahhVKV0IH9...",
+                #     "echoprint_version": 4.12,
+                #     "synchstring": "eJx1mIlx7ToORFNRCCK455_YoE9Dtt-vmrKsK3EBsTY...",
+                #     "synch_version": 1,
+                #     "rhythmstring": "eJyNXAmOLT2r28pZQuZh_xv7g21Iqu_3pCd160xV...",
+                #     "rhythm_version": 1
+                #   }
+                # }
+            track = {}
+            track['duration'] = len(sig)/rate
+            track['tempo'] = 'nan'
+            track['parts'] = recording_parts
+            analysis = {'track' : track}
+            return analysis
+        except:
+            logging.warning('Error while opening and analyzing audio file! (Only WAV files supported.)')
+            analysis = {}
+            return analysis
