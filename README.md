@@ -31,7 +31,7 @@ LOOK_STORAGE_PATH=tmp/ gunicorn --reload 'mirserver.app:get_app()'
  from somewhere else ..
 
  ```
-http POST localhost:8000/audio Content-Type:audio/wav < epianoC2.wav
+http POST localhost:8000/v1/audio Content-Type:audio/wav < epianoC2.wav
 ```
 
 You should receive:

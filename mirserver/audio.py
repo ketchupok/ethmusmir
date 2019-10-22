@@ -53,7 +53,8 @@ class Resource(object):
         audio_result = audio_analysis.analyse()
         resp.body = json.dumps(audio_result, ensure_ascii=False)
         resp.status = falcon.HTTP_201
-        resp.location = '/audio/' + name
+        resp.location = '/v1/audio/' + name
+        logging.info('Returned "201 created" MIR analysis results.')
 
 
 #  storing the received audio file (TODO: make it temporarily)

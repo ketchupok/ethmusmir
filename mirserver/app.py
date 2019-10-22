@@ -6,7 +6,7 @@ from .audio import AudioStore, Resource
 def create_app(audio_store):
     audio_resource = Resource(audio_store)
     api = falcon.API()
-    api.add_route('/audio', audio_resource)
+    api.add_route('/v1/audio', audio_resource)
     return api
 
 

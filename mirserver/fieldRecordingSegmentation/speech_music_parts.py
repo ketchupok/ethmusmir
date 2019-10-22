@@ -149,7 +149,7 @@ def find_speech_music_parts(file_name):
     for frame_prob in segment_predictions:
         time = i * config['label_sampling_rate']
         content = categories[frame_prob.argmax()]
-        print(str(time) + ': ' + colored(content, 'green'))
+        #print(str(time) + ' seconds: ' + colored(content, 'green'))
         time_content.append([time, content])
         i = i+ 1
     time_content = remove_repeated_content(time_content)
