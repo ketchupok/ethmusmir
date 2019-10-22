@@ -12,7 +12,7 @@ import scipy.io.wavfile as wav
 from .fieldRecordingSegmentation.speech_music_parts import find_speech_music_parts
 
 # General Settings
-logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s', filename='EthMusMIR_server.log')
 mimetypes.init()
 mimetypes.add_type('audio/wav', '.wav')
 ALLOWED_AUDIO_TYPES = (
