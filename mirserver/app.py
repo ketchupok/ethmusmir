@@ -1,3 +1,6 @@
+# code based on: https://falcon.readthedocs.io/en/stable/user/tutorial.html#first-steps
+# adapted by Alex Hofmann (2020)
+
 import os
 import falcon
 

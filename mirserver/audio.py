@@ -1,3 +1,5 @@
+# code based on: https://falcon.readthedocs.io/en/stable/user/tutorial.html#first-steps
+# adapted by Alex Hofmann (2020)
 import io
 import mimetypes
 import os
@@ -45,6 +47,7 @@ class Resource(object):
         resp.content_type = falcon.MEDIA_MSGPACK
         resp.status = falcon.HTTP_200
 
+
     @falcon.before(validate_audio_type) # hook
     def on_post(self, req, resp):
         logging.info('Received a POST request.')
@@ -83,6 +86,7 @@ class AudioStore(object):
         logging.info('File received and temporarily stored.')
         return name
 
+
 class AudioAnalysis(object):
 
     def __init__(self, name, path):
@@ -94,35 +98,6 @@ class AudioAnalysis(object):
         try:
             (rate, sig) = wav.read(self._storage_path + self._name)
             recording_parts = find_speech_music_parts(self._storage_path + self._name)
-
-                #   "track": {
-                #     "duration": 255.34898,
-                #     "sample_md5": "",
-                #     "offset_seconds": 0,
-                #     "window_seconds": 0,
-                #     "analysis_sample_rate": 22050,
-                #     "analysis_channels": 1,
-                #     "end_of_fade_in": 0,
-                #     "start_of_fade_out": 251.73333,
-                #     "loudness": -11.84,
-                #     "tempo": 98.002,
-                #     "tempo_confidence": 0.423,
-                #     "time_signature": 4,
-                #     "time_signature_confidence": 1,
-                #     "key": 5,
-                #     "key_confidence": 0.36,
-                #     "mode": 0,
-                #     "mode_confidence": 0.414,
-                #     "codestring": "eJxVnAmS5DgOBL-ST-B9_P9j4x7M6qoxW9tpsZQSCeI...",
-                #     "code_version": 3.15,
-                #     "echoprintstring": "eJzlvQmSHDmStHslxw4cB-v9j_A-tahhVKV0IH9...",
-                #     "echoprint_version": 4.12,
-                #     "synchstring": "eJx1mIlx7ToORFNRCCK455_YoE9Dtt-vmrKsK3EBsTY...",
-                #     "synch_version": 1,
-                #     "rhythmstring": "eJyNXAmOLT2r28pZQuZh_xv7g21Iqu_3pCd160xV...",
-                #     "rhythm_version": 1
-                #   }
-                # }
             track = {}
             track['duration'] = len(sig)/rate
             track['tempo'] = 'nan'
