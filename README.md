@@ -1,4 +1,4 @@
-# EthMusMIR - Anaylsis Server
+# EthMusMIR - Analysis Server
 
 
 Architecture is heavily inspired by (copied from) the Falcon API [First Steps Tutorial](https://falcon.readthedocs.io/en/stable/user/tutorial.html#first-steps)
